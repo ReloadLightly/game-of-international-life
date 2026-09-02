@@ -1,0 +1,77 @@
+{
+  "design": {
+    "capability_regimes": [
+      "balanced",
+      "dominant-power"
+    ],
+    "dominant_power_share": 0.35,
+    "initial_polities": 8,
+    "paired_seeds_per_condition": 6,
+    "policies": [
+      "security-seeking",
+      "power-maximizing"
+    ],
+    "resource_regimes": [
+      "diffuse",
+      "clustered"
+    ],
+    "shape": [
+      12,
+      16
+    ],
+    "steps": 40
+  },
+  "experiment": "M3 structural comparison",
+  "interpretive_status": "computational mechanism comparison; not historical validation and not a complete formalization of Waltz or Mearsheimer",
+  "matching_contract": {
+    "battle_noise_key": [
+      "battle_seed",
+      "generation",
+      "attacker_id",
+      "defender_id",
+      "target_cell_id"
+    ],
+    "difference_definition": "power-maximizing minus security-seeking",
+    "same_initial_world_within_policy_pair": true,
+    "same_world_mechanics_across_policies": true
+  },
+  "policy_parameters": {
+    "power-maximizing": {
+      "frontier_weight": 0.05,
+      "name": "power-maximizing",
+      "relative_gain_weight": 80.0,
+      "resource_weight": 0.12,
+      "rival_power_weight": 1.0,
+      "security_reference": 1.1
+    },
+    "security-seeking": {
+      "frontier_weight": 0.1,
+      "name": "security-seeking",
+      "resource_weight": 0.08,
+      "sufficiency_ratio": 1.1,
+      "threat_weight": 0.9
+    }
+  },
+  "shared_world_parameters": {
+    "attack_cost": 0.1,
+    "attack_threshold": 0.98,
+    "battle_damage": 0.88,
+    "battle_noise": 0.06,
+    "battle_seed": 0,
+    "boundary": "fixed",
+    "conquest_retention": 0.2,
+    "defense_cost": 0.06,
+    "defense_multiplier": 1.1,
+    "fortification_cap": 1.5,
+    "fortification_growth": 0.05,
+    "fortification_value": 0.75,
+    "garrison_strength": 0.35,
+    "mobilization": 0.34,
+    "offense_multiplier": 1.05,
+    "production_rate": 0.55,
+    "reserve_decay": 0.04,
+    "resource_attraction": 0.12,
+    "support_bonus": 0.12
+  },
+  "version": "0.3.0"
+}

@@ -3,6 +3,7 @@ import pytest
 
 from international_life.hexgrid import labels_are_contiguous
 from international_life.territorial import (
+    OpportunisticPolicy,
     TerritorialParameters,
     TerritorialWorld,
     border_edge_count,
@@ -127,6 +128,17 @@ def test_fixed_seed_replays_the_same_territorial_history() -> None:
     assert np.array_equal(first.polities, second.polities)
     assert np.array_equal(first.treasury, second.treasury)
     assert first.battles == second.battles
+
+
+def test_default_policy_matches_explicit_opportunistic_policy() -> None:
+    params = TerritorialParameters(battle_seed=4)
+    initial = initialize_territorial_world((8, 10), num_polities=4, seed=2)
+    implicit = territorial_step(initial, params)
+    explicit = territorial_step(initial, params, policy=OpportunisticPolicy())
+    assert np.array_equal(implicit.polities, explicit.polities)
+    assert np.array_equal(implicit.treasury, explicit.treasury)
+    assert implicit.orders == explicit.orders
+    assert implicit.battles == explicit.battles
 
 
 def test_invalid_world_rejects_missing_treasury_entry() -> None:

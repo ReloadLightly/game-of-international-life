@@ -1,87 +1,194 @@
 # Game of International Life
 
 [![CI](https://github.com/ReloadLightly/game-of-international-life/actions/workflows/ci.yml/badge.svg)](https://github.com/ReloadLightly/game-of-international-life/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-111111.svg)](LICENSE)
 
-**Cellular automata, artificial life, and evolutionary rule discovery for international relations under anarchy.**
+## From Conway's Game of Life to artificial geopolitics
 
-> How much international order—and disorder—can emerge from simple local rules of threat perception, arming, territorial competition, alliance commitment, and adaptation?
+**Game of International Life is a computational laboratory for international relations: cellular automata, emergent territorial states, and matched experiments on security, power, alliances, and adaptation under anarchy.**
 
-Game of International Life begins with a faithful implementation of **Conway's Game of Life** and then builds explicitly theory-bearing computational worlds for international relations. The aim is not to rename living cells “states” and call the result realism. The aim is to translate theoretical mechanisms into inspectable transition rules, derive system-level patterns from local interaction, and compare rival explanations under matched conditions.
+The project asks a deliberately demanding question:
 
-Version **0.2** now contains three working layers:
+> When an international-relations theory is translated into explicit local rules and placed in the same artificial world as its rivals, what patterns of order and disorder actually emerge?
 
-- **M0:** canonical Conway B3/S23;
-- **M1:** a Jervisian security-dilemma cellular automaton;
-- **M2:** a hexagonal world of connected territorial states, local resources, aggregated capability, conquest, extinction, and fragmentation.
+The repository begins with a faithful implementation of Conway's Game of Life, then moves toward theory-bearing artificial worlds in which arms races, borders, territorial states, polarity, conquest, fragmentation, alliance dilemmas, and eventually new strategic rules can emerge from interaction rather than being scripted as outcomes.
 
 <p align="center">
-  <img src="docs/assets/territorial_m2_final.png" width="760" alt="Hexagonal territorial world after sixty generations">
+  <img src="docs/assets/m3_matched_worlds.svg" width="980" alt="Matched M3 comparison of one initial world under security-seeking and power-maximizing policies">
 </p>
 
-The M2 image is one deterministic artificial history. Colors denote political control of stable geographic cells. Borders and the distribution of capabilities emerge through local territorial interaction; the image is not a map of a real region and not yet a test of Waltz or Mearsheimer.
+The figure above is a matched computational experiment. The initial geography, resources, capability distribution, battle mechanics, and stochastic shock schedule are identical. Only the policy rule changes.
 
-## Why this is a serious—and very fun—research program
+## Why this is not just IR-themed Game of Life
 
-Cellular and spatial agent-based models are unusually natural laboratories for systemic IR theory:
+A weak version of this project would rename Conway's live cells “states,” dead cells “failed states,” and cell death “war.” That would be visually charming and theoretically empty.
 
-- no central governor is needed;
-- units possess bounded, spatially structured information;
-- time and update order are explicit;
-- borders, arms races, concentration, conquest, fragmentation, alliance blocs, and collapse can emerge rather than being stipulated;
-- artificial histories can be replayed while changing one assumption at a time;
-- hand-coded theories can later become baselines and ancestors for evolutionary rule discovery.
+Game of International Life instead keeps two layers separate:
 
-There is a genuine intellectual lineage behind the project. Bremer and Mihalka's **“Machiavelli in Machina: Or Politics among Hexagons”** modeled international competition spatially in 1977. Cederman later developed lattice-based models of emergent polarity, state formation, war, and endogenous geopolitical boundaries. This repository treats those works as part of a computational fossil record worth reproducing, clarifying, and extending with modern software and evolutionary computation.
+1. **Canonical cellular automata** teach the formal grammar of local interaction, synchronous updating, neighborhoods, rule spaces, phase behavior, and emergence.
+2. **Theory-bearing models** define what a cell, polity, capability, signal, border, alliance, action, and outcome mean before a simulation is run.
 
-## Implemented models
+Every theory implementation must expose a complete chain:
 
-### M0 — Conway laboratory
+```text
+assumptions
+    → information available to actors
+    → local decision rule
+    → interaction process
+    → system-level observable
+    → failure condition
+```
 
-A transparent NumPy implementation of Conway's **B3/S23** rule with:
+A theory's name is never accepted as a substitute for a mechanism.
+
+## Current research ladder
+
+| Milestone | Artificial world | Question | Status |
+|---|---|---|---|
+| **M0** | Conway B3/S23 | Can the CA engine reproduce canonical still lifes, oscillators, and moving patterns exactly? | Implemented |
+| **M1** | Jervisian security-dilemma CA | How do offense–defense advantage and distinguishability shape arming and conflict? | Implemented |
+| **M2** | Hexagonal territorial world | Can connected states, borders, capabilities, conquest, extinction, and fragmentation emerge on a common substrate? | Implemented |
+| **M3** | Matched structural-policy experiment | What changes when security-seeking stops at sufficiency but power maximization continues beyond it? | Implemented |
+| **M4** | Spatial world plus alliance graph | When do stronger commitments prevent abandonment but increase entrapment and conflict cascades? | Next |
+| **M5+** | Evolved and empirically grounded worlds | Can GA/GP discover interpretable strategic rules that outperform or extend hand-coded theories? | Planned |
+
+## M3 — Security seeking versus power maximization
+
+M3 is the first experiment in the repository where rival strategic rules inhabit **the same world**.
+
+### The shared world
+
+Both policies receive the same:
+
+- six-neighbor hexagonal geography;
+- initial territorial borders;
+- spatial resource field;
+- exact initial capability distribution;
+- polity-level treasury and production mechanics;
+- fortification, mobilization, attack, defense, and conquest rules;
+- one-action-per-polity constraint;
+- synchronous transition schedule;
+- stochastic battle shocks.
+
+Each initial world is hashed. Matched policy runs must carry the same fingerprint or the experiment aborts. Battle noise is keyed to the potential encounter—generation, attacker, defender, and target cell—rather than to the position of an attack in an order list. Thus, a shared encounter receives the same shock even when one policy launches additional attacks elsewhere.
+
+### The only intended difference
+
+#### Security-seeking policy
+
+A polity compares its capability with that of its strongest adjacent rival. When its security ratio is below a declared sufficiency threshold, it may take a feasible territorial action that repairs vulnerability. Once the threshold is reached, it abstains even if further expansion would be easy.
+
+#### Power-maximizing policy
+
+A polity uses the same information, candidate targets, feasibility threshold, and battle mechanics. It also values gains in relative capability, productive territory, and weakening powerful rivals. It therefore continues to exploit favorable opportunities after immediate security sufficiency has been reached.
+
+These are deliberately minimal **computational probes inspired by defensive and offensive structural realism**. They are not claims that Kenneth Waltz or John Mearsheimer can be reduced to a few lines of Python.
+
+### Frozen experimental design
+
+M3 crosses three dimensions:
+
+| Dimension | Condition A | Condition B |
+|---|---|---|
+| Initial capability distribution | Eight balanced powers | One 35% dominant power plus seven smaller powers |
+| Resource geography | Diffuse resources | Spatially clustered resources |
+| Strategic rule | Security seeking | Power maximization |
+
+The default command runs six matched seeds in each structural condition: **48 policy histories arranged as 24 paired comparisons**.
+
+```bash
+international-life m3 --output-dir artifacts/m3
+```
+
+The default reference design uses a `12 × 16` hex world, eight initial states, and forty generations. It normally completes in well under a minute on a modern laptop.
+
+### What the reference run shows
+
+The bundled v0.3 reference run is a software-and-mechanism check, not an empirical finding. Across its 24 matched pairs, the mean difference below is defined as:
+
+```text
+power-maximizing minus security-seeking
+```
+
+| Observable | Mean paired difference |
+|---|---:|
+| Attack orders | **+21.54** |
+| Attacks after security sufficiency | **+31.63** |
+| Cumulative war cost | **+135.73** |
+| Territorial conquests | **+20.83** |
+| Final capability HHI | **+0.041** |
+| Original-state survival rate | **−0.115** |
+| Final state count | **−0.96** |
+
+<p align="center">
+  <img src="docs/assets/m3_attacks_while_secure.svg" width="820" alt="M3 attacks launched after security sufficiency">
+</p>
+
+The most important result is the first mechanism check: the security-seeking rule launches no attacks after its own sufficiency criterion is met, while the power-maximizing rule does so in every paired reference world. The later differences in war cost, conquest, concentration, and survival arise endogenously through feedback. They are average tendencies, not universal laws: some individual seeds produce reversals.
+
+The exact manifest and compact result tables are committed under [`docs/results/`](docs/results/):
+
+- [`m3-reference-manifest.json`](docs/results/m3-reference-manifest.json)
+- [`m3-reference-ensemble-summary.csv`](docs/results/m3-reference-ensemble-summary.csv)
+- [`m3-reference-paired-differences.csv`](docs/results/m3-reference-paired-differences.csv)
+
+The complete model specification, hypotheses, equations, observables, and limits are in [`docs/m3-structural-comparison.md`](docs/m3-structural-comparison.md).
+
+## Earlier worlds
+
+### M0 — Conway's Game of Life
+
+M0 provides a transparent NumPy implementation of the canonical **B3/S23** rule with:
 
 - synchronous updates;
 - fixed and toroidal boundaries;
 - block, blinker, glider, and R-pentomino seeds;
-- regression tests for still lifes, oscillators, and glider translation.
+- regression tests for still lifes, periodicity, and glider translation.
 
-Conway's Life remains a faithful baseline. It teaches the grammar of cellular automata without pretending that its birth and survival rule is already a theory of international politics.
+<p align="center">
+  <img src="docs/assets/conway_glider_g4.png" width="470" alt="Conway glider after four generations">
+</p>
+
+Conway remains Conway. The model is a formal baseline, not a decorative allegory for world politics.
 
 ### M1 — Jervis's four strategic worlds
 
-Each square-lattice cell is a polity with a discrete arms level, fixed offensive or defensive posture, local threat perception, and conflict-initiation state. Two environmental controls implement the first mechanism experiment:
+Each square-lattice cell is a polity with a discrete arms level, an offensive or defensive posture, locally perceived threat, and a conflict state. Two controls operationalize the first theory-bearing experiment:
 
-1. **Offense advantage** from `-1` (strong defense dominance) to `+1` (strong offense dominance).
-2. **Distinguishability** from `0` (offensive and defensive postures look alike) to `1` (perfectly distinguishable).
+1. **Offense advantage**, from strong defense dominance to strong offense dominance.
+2. **Distinguishability**, from complete ambiguity to perfect separation of offensive and defensive postures.
 
 <p align="center">
-  <img src="docs/assets/jervis_phase_final_arms.png" width="700" alt="Phase diagram of final mean arming across offense advantage and offense-defense distinguishability">
+  <img src="docs/assets/jervis_phase_final_arms.png" width="720" alt="Jervisian offense advantage and distinguishability parameter surface">
 </p>
 
-The parameter surface is a reproducible mechanism check, not an empirical claim. It demonstrates that the theoretical controls are causally live and generate structured differences under matched initial worlds.
+The surface is a generative mechanism test: it checks whether changing the theoretical controls changes arming and conflict in the intended direction under matched initial worlds. It does not validate the theory against history.
 
-The readable model is in [`src/international_life/jervis.py`](src/international_life/jervis.py); the formal specification is in [`docs/m1-jervis-model.md`](docs/m1-jervis-model.md).
+Read [`docs/m1-jervis-model.md`](docs/m1-jervis-model.md).
 
-### M2 — Hexagonal territorial states
+### M2 — Territorial states on a hexagonal world
 
-M2 separates **geographic cell identity** from **political identity**. Stable hexagonal sites carry local resource productivity and fortification; mutable polity IDs describe who controls them. Connected multi-cell states collect local production into polity-level treasuries and contest adjacent territory.
+M2 separates **geographic identity** from **political identity**. A stable hexagonal site carries local resources and fortification; a mutable polity ID records who controls it. Contiguous states aggregate resources into treasury and capability, contest neighboring territory, pay explicit war costs, disappear through conquest, and split into traceable successor states when their territory becomes disconnected.
 
-One synchronous generation performs:
+<p align="center">
+  <img src="docs/assets/territorial_m2_final.png" width="760" alt="M2 hexagonal territorial state world">
+</p>
 
-1. resource production and reserve decay;
-2. polity-level capability aggregation;
-3. local border-target evaluation;
-4. seeded battle resolution and explicit war costs;
-5. simultaneous territorial transfer;
-6. fortification damage and recovery;
-7. state extinction and connected-component fragmentation.
+M2 measures:
 
-When conquest cuts a polity into disconnected pieces, the largest component keeps the parent ID and detached components become new successor states with proportionally inherited treasuries. Polity IDs are never recycled.
+- state count and size distribution;
+- capability shares, HHI, and effective number of powers;
+- interstate border length;
+- battles, conquests, and territorial turnover;
+- war costs;
+- extinctions, fragmentation, and successor formation.
 
-M2 reports state size, border length, capability concentration, effective number of powers, battles, conquests, territorial turnover, extinctions, and fragmentations for every generation. Its supplied opportunistic attack rule is deliberately **not** labeled Waltzian or Mearsheimerian: it exercises the world substrate so later rival policy rules can share exactly the same geography and event resolution.
+Its default opportunistic policy is a substrate test, not a realism theory. M3 replaces only the policy while preserving the world.
 
-The implementation is in [`src/international_life/territorial.py`](src/international_life/territorial.py); the full mechanism specification is in [`docs/m2-territorial-model.md`](docs/m2-territorial-model.md).
+Read [`docs/m2-territorial-model.md`](docs/m2-territorial-model.md).
 
-## Quick start
+## Installation
 
 Python 3.11 or newer is recommended.
 
@@ -91,60 +198,56 @@ cd game-of-international-life
 python -m venv .venv
 ```
 
-Activate the environment and install the project:
+Activate the environment, then install the package and development tools:
 
 ```bash
 python -m pip install -e ".[dev]"
 pytest
+ruff check .
 ```
 
-The equivalent `uv` workflow is:
+With `uv`:
 
 ```bash
 uv sync --extra dev
 uv run pytest
 ```
 
-### Run Conway's Life
+## Run the models
+
+### Conway
 
 ```bash
 international-life conway \
   --pattern glider \
+  --size 40 \
   --steps 40 \
-  --output artifacts/conway_glider.png
+  --boundary wrap \
+  --output artifacts/conway_final.png
 ```
 
-### Run one Jervisian world
+### One Jervisian world
 
 ```bash
 international-life jervis \
-  --offense-advantage 0.75 \
-  --distinguishability 0.15 \
+  --size 40 \
   --steps 80 \
-  --seed 7 \
+  --seed 3 \
+  --offense-advantage 0.75 \
+  --distinguishability 0.25 \
   --output artifacts/jervis_final.png
 ```
 
-### Compare Jervis's four worlds
+### Jervis four-world comparison
 
 ```bash
 international-life four-worlds \
   --steps 80 \
   --seeds 12 \
-  --output-dir artifacts/jervis
+  --output-dir artifacts/jervis-four-worlds
 ```
 
-### Generate a Jervis phase diagram
-
-```bash
-international-life phase-diagram \
-  --steps 60 \
-  --seeds 6 \
-  --points 9 \
-  --output-dir artifacts/jervis-phase
-```
-
-### Run one M2 territorial history
+### One territorial history
 
 ```bash
 international-life territorial \
@@ -156,7 +259,7 @@ international-life territorial \
   --output artifacts/territorial_final.png
 ```
 
-### Run an M2 ensemble
+### Territorial ensemble
 
 ```bash
 international-life territorial-ensemble \
@@ -164,102 +267,167 @@ international-life territorial-ensemble \
   --width 32 \
   --states 10 \
   --steps 60 \
-  --seeds 8 \
+  --seeds 6 \
   --output-dir artifacts/territorial-ensemble
 ```
 
-The ensemble command writes generation-level CSV data, ensemble summaries, initial and final hex maps, and separate trajectories for state count, effective powers, and territorial conquest.
+### M3 structural comparison
 
-## What would count as “testing” an IR theory?
+```bash
+international-life structural-compare \
+  --height 12 \
+  --width 16 \
+  --states 8 \
+  --steps 40 \
+  --seeds 6 \
+  --dominant-share 0.35 \
+  --output-dir artifacts/m3
+```
 
-The project distinguishes three increasingly demanding standards:
+`m3` is an alias for `structural-compare`.
 
-1. **Generative test:** Are the theory's stated mechanisms sufficient to generate its expected macro-pattern?
-2. **Discriminating computational experiment:** Do rival theories produce distinguishable outcomes and process traces under the same initial worlds and interventions?
-3. **Empirical test:** After transparent calibration or initialization with historical and geospatial data, do the models reproduce held-out patterns better than alternatives?
+## M3 output contract
 
-M1 performs a level-one mechanism check. M2 builds the shared world needed for level-two comparisons. A simulation that can reproduce anything explains nothing, so assumptions, observables, counterfactual controls, and failure conditions remain visible.
+Every M3 run writes:
 
-## Theory roadmap
+| File | Purpose |
+|---|---|
+| `m3_manifest.json` | Complete design, shared dynamics, policy parameters, and matching contract |
+| `m3_timeseries.csv` | Every generation of every policy history |
+| `m3_run_summary.csv` | One row per policy × structure × seed run |
+| `m3_ensemble_summary.csv` | Means by policy and structural condition |
+| `m3_paired_differences.csv` | Within-world power-minus-security contrasts |
+| `m3_matched_worlds.png` | One initial world and its two divergent policy histories |
+| `m3_attacks_while_secure.png` | Direct stopping-rule mechanism check |
+| `m3_war_cost.png` | Systemic mobilization cost comparison |
+| `m3_power_concentration.png` | Final capability concentration comparison |
 
-### M3 — Waltzian structural worlds
+The raw tables are the result. The figures are views generated from those tables or their underlying histories.
 
-Hold unit-level rules as homogeneous as possible while varying capability distribution, polarity, geography, projection costs, and the availability of balancing. The model must not directly program states to produce bipolarity; polarity should remain a macro-property of capability distribution.
-
-### M4 — Defensive versus offensive realism
-
-Implement matched policy families in the same M2 worlds:
-
-- a security-seeking rule that stops expansion beyond a defensible sufficiency threshold;
-- a relative-power-maximizing rule that continues exploiting opportunities beyond immediate security.
-
-The key question is not “realism on or off,” but whether these rules produce different survival, concentration, war, and systemic-cost signatures under identical geography, resources, shocks, and information.
-
-### M5 — Snyderian alliance politics
-
-Add a dynamic graph above the spatial lattice. Stronger commitments should reduce abandonment risk while increasing exposure to entrapment. This layer can study chain-ganging, buck-passing, alliance cohesion, partner defection, and conflict cascades without forcing non-geographic relations into cell adjacency.
-
-### M6 — Jervisian spiral and deterrence
-
-Separate actual intention, doctrine, observable posture, signal noise, belief, and response. The same defensive move should be capable of producing reassurance, deterrence, or a self-reinforcing spiral depending on information and strategic structure.
-
-### M7 — Evolved local rules
-
-Use GA or typed GP only after theory baselines exist. Candidate rules should remain interpretable—small decision lists, Boolean expressions, transition tables, or typed trees—and should be evaluated across distributions of maps and shocks rather than one favorite world.
-
-### M8 — Computational fossil record
-
-Reconstruct Bremer–Mihalka, Cederman, and related spatial IR models as faithfully as surviving documentation permits; separate historical replication from modernization; then compare original rules with contemporary alternatives.
-
-## Repository structure
+## Code architecture
 
 ```text
 src/international_life/
-├── core.py                         # square-lattice neighborhoods and update utilities
-├── hexgrid.py                      # odd-row hex geometry and connectivity
-├── conway.py                       # faithful B3/S23 baseline
-├── jervis.py                       # M1 security-dilemma mechanism model
-├── territorial.py                 # M2 territorial world and transition rules
-├── visualization.py               # square and true-hex renderers
-├── cli.py
+├── core.py                         # square-lattice update primitives
+├── conway.py                       # faithful B3/S23
+├── jervis.py                       # M1 security-dilemma CA
+├── hexgrid.py                      # six-neighbor geometry and connectivity
+├── territorial.py                 # compact M2/M3 public API
+├── structural.py                  # M3 conditions and public policy API
+├── _territorial/
+│   ├── types.py                    # immutable worlds, orders, and events
+│   ├── initialization.py           # connected maps and resource fields
+│   ├── measures.py                 # polity and system observables
+│   ├── policy.py                   # shared candidates and rival rules
+│   └── dynamics.py                 # common battle and succession engine
 └── experiments/
-    ├── jervis_four_worlds.py       # matched 2×2 experiment
-    ├── jervis_phase_diagram.py     # M1 parameter sweep
-    └── territorial_ensemble.py     # M2 trajectories across reproducible worlds
-
-tests/                              # invariants, mechanisms, replay, and CLI checks
-docs/                               # formal model and theory-translation documents
-artifacts/                          # generated outputs; not committed by default
+    ├── jervis_four_worlds.py
+    ├── jervis_phase_diagram.py
+    ├── territorial_ensemble.py
+    └── structural_comparison.py
 ```
 
-## Research principles
+The architectural boundary is intentional:
 
-- Translate theory before tuning the model.
-- Keep local information and decision rules explicit.
-- Separate world mechanics from theory-specific policy rules.
-- Compare ensembles, not attractive single runs.
-- Use matched seeds for counterfactual comparisons.
-- Distinguish mechanism exploration from empirical validation.
-- Add complexity only when a concrete research question requires it.
-- Treat unexpected emergence as a finding to diagnose, not automatic confirmation.
+```text
+world mechanics ≠ policy rule ≠ experiment design ≠ interpretation
+```
 
-## Verification status
+This makes rival theories comparable and later allows hand-coded rules to become baselines, ancestors, or behavioral descriptors for evolutionary search.
 
-The v0.2 checkpoint has **30 passing tests** and **93% statement coverage** in the local verification run. Tests cover canonical Conway behavior, square and hex neighborhoods, deterministic replay, M1 directional controls, connected initial states, capability aggregation, conquest, extinction, fragmentation, measurements, plots, and command-line workflows. GitHub Actions runs the suite on Python 3.11 and 3.12.
+## What “testing an IR theory” means here
 
-## Intellectual starting points
+The repository distinguishes three levels of evidence.
 
-- Bremer, Stuart A., and Michael Mihalka. 1977. “Machiavelli in Machina: Or Politics among Hexagons.” In *Problems of World Modeling*, 303–337.
-- Cederman, Lars-Erik. 1994. “Emergent Polarity: Analyzing State-Formation and Power Politics.” *International Studies Quarterly* 38(4): 501–533. DOI: `10.2307/2600863`.
-- Cederman, Lars-Erik. 1997. *Emergent Actors in World Politics: How States and Nations Develop and Dissolve*.
-- Cederman, Lars-Erik. 2002. “Endogenizing Geopolitical Boundaries with Agent-Based Modeling.” *PNAS* 99(Suppl. 3): 7296–7303. DOI: `10.1073/pnas.082081099`.
-- Iba, Hitoshi. 2013. *Agent-Based Modeling and Simulation with Swarm*.
-- Jervis, Robert. 1978. “Cooperation under the Security Dilemma.” *World Politics* 30(2): 167–214. DOI: `10.2307/2009958`.
-- Mearsheimer, John J. 2001. *The Tragedy of Great Power Politics*.
-- Snyder, Glenn H. 1984. “The Security Dilemma in Alliance Politics.” *World Politics* 36(4): 461–495.
-- Snyder, Glenn H. 1997. *Alliance Politics*.
-- Waltz, Kenneth N. 1979. *Theory of International Politics*.
+### 1. Generative mechanism test
 
-## License
+Can the theory's explicit micro-rules generate the macro-pattern associated with it? For example, can ambiguous defensive arming generate a spiral without any aggressive central planner?
 
-MIT.
+### 2. Discriminating computational experiment
+
+Do rival rules produce different process signatures or outcomes under the same artificial histories? M3 reaches this level by changing only the stopping objective while matching worlds and shocks.
+
+### 3. Empirical test
+
+Can models initialized or calibrated with documented historical data predict or reconstruct held-out processes better than rival models? The repository has not reached this level, and it does not claim otherwise.
+
+A beautiful final map is never sufficient evidence. Useful comparisons require matched worlds, ensembles, process observables, sensitivity analysis, and explicit failure conditions.
+
+## Design principles
+
+1. **Faithful baselines before metaphor.** Canonical CA implementations remain canonical.
+2. **Mechanisms before labels.** Every named theory must specify information, decisions, and observables.
+3. **One shared world for rival rules.** A theory does not receive friendlier geography or combat mechanics.
+4. **Matched histories before anecdotes.** Seeds, fingerprints, and stochastic schedules are recorded.
+5. **Process as well as outcome.** Similar end states may conceal different causal paths.
+6. **Small executable experiments before elaborate frameworks.** Complexity must answer a concrete question.
+7. **Hand-coded theories before evolution.** GA/GP search needs intelligible baselines and interpretable representations.
+8. **No validation theater.** A model can verify a mechanism without validating a historical theory.
+
+## Roadmap
+
+### M4 — Snyderian alliance politics
+
+Add a graph layer above the territorial lattice so strategic ties need not coincide with geography. The first experiment will vary alliance commitment and polarity while measuring abandonment, entrapment, chain-ganging, buck-passing, bloc formation, and conflict diffusion.
+
+### M5 — Jervis on the territorial world
+
+Add incomplete information about posture, capability, and intention to territorial states. This will connect spiral–deterrence dynamics with borders, mobilization, and conquest rather than treating each cell as an isolated polity.
+
+### M6 — Evolutionary rule discovery
+
+Use compact, inspectable representations—decision lists, typed GP trees, Boolean expressions, or finite-state programs—to evolve policies across distributions of worlds. Hand-coded Jervisian, security-seeking, power-maximizing, and alliance policies become baselines rather than sacred endpoints.
+
+### M7 — Computational fossil-record replications
+
+Reconstruct major spatial IR models, separating faithful replication from modern extension. Priority ancestors include Bremer and Mihalka's *Politics among Hexagons* and Cederman's models of emergent polarity and state formation.
+
+### M8 — Empirical contact
+
+Introduce documented geography, capability, alliance, and conflict data only when parameters and observables have clear empirical meaning. Calibration and evaluation periods must remain separate.
+
+## Intellectual lineage
+
+The project sits at the intersection of cellular automata, artificial life, complex systems, evolutionary computation, and international-relations theory. Key starting points include:
+
+- John Conway's Game of Life, introduced publicly by Martin Gardner (1970);
+- Stuart Bremer and Michael Mihalka, “Machiavelli in Machina: Or Politics among Hexagons” (1977);
+- Robert Jervis, “Cooperation under the Security Dilemma” (1978);
+- Kenneth Waltz, *Theory of International Politics* (1979);
+- Glenn Snyder, “The Security Dilemma in Alliance Politics” (1984) and *Alliance Politics* (1997);
+- Lars-Erik Cederman, “Emergent Polarity” (1994) and *Emergent Actors in World Politics* (1997);
+- John Mearsheimer, *The Tragedy of Great Power Politics* (2001);
+- Hitoshi Iba, *Agent-Based Modeling and Simulation with Swarm* (2013).
+
+See [`docs/research-program.md`](docs/research-program.md) and [`docs/theory-to-mechanism.md`](docs/theory-to-mechanism.md) for the larger research agenda.
+
+## Verification
+
+At the v0.3 checkpoint:
+
+- **38 tests pass**;
+- **94% statement coverage** in the local verification run;
+- deterministic replay is tested;
+- geographic identity remains stable while political control changes;
+- every represented polity is contiguous after each transition;
+- matched policy runs are audited through initial-world fingerprints;
+- encounter-level common random numbers are tested;
+- CI runs on Python 3.11 and 3.12.
+
+## Contributing
+
+Contributions are welcome when they sharpen a mechanism, replication, experiment, invariant, or theoretical comparison. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a substantial pull request.
+
+## Citation and license
+
+The project is released under the [MIT License](LICENSE). Citation metadata are available in [`CITATION.cff`](CITATION.cff).
+
+```bibtex
+@software{loechli_game_of_international_life_2026,
+  author  = {Roland Löchli},
+  title   = {Game of International Life},
+  year    = {2026},
+  version = {0.3.0},
+  url     = {https://github.com/ReloadLightly/game-of-international-life}
+}
+```

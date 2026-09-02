@@ -1,1 +1,1 @@
-"""Internal modules for the M2 territorial model."""
+"""Internal implementation modules for territorial models."""

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "game-of-international-life"
-version = "0.2.0"
-description = "Cellular automata and evolutionary rule discovery for international relations under anarchy."
+version = "0.3.0"
+description = "A computational laboratory for international relations using cellular automata, emergent states, and matched theory experiments."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -16,6 +16,8 @@ keywords = [
   "cellular-automata",
   "game-of-life",
   "international-relations",
+  "computational-social-science",
+  "structural-realism",
   "agent-based-modeling",
   "complex-systems",
   "evolutionary-computation",
@@ -46,6 +48,8 @@ international-life = "international_life.cli:main"
 
 [project.urls]
 Repository = "https://github.com/ReloadLightly/game-of-international-life"
+Documentation = "https://github.com/ReloadLightly/game-of-international-life/tree/main/docs"
+Issues = "https://github.com/ReloadLightly/game-of-international-life/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

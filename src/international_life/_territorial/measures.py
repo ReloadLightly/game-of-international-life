@@ -1,6 +1,8 @@
-"""Polity aggregation, borders, and system-level M2 observables."""
+"""Polity aggregation, borders, and system-level territorial observables."""
 
 from __future__ import annotations
+
+from statistics import fmean
 
 import numpy as np
 from numpy.typing import NDArray
@@ -66,8 +68,13 @@ def border_edge_count(world: TerritorialWorld) -> int:
     )
 
 
-def territorial_metrics(world: TerritorialWorld) -> dict[str, int | float]:
-    """Compute state-size, polarity, border, and war observables for one generation."""
+def resource_coefficient_of_variation(world: TerritorialWorld) -> float:
+    """Return a scale-free measure of spatial resource inequality."""
+    return float(world.resources.std() / world.resources.mean())
+
+
+def territorial_metrics(world: TerritorialWorld) -> dict[str, int | float | str]:
+    """Compute state-size, polarity, border, war, and policy-process observables."""
     counts = polity_cell_counts(world)
     ids = alive_polities(world)
     sizes = counts[ids].astype(np.float64)
@@ -84,8 +91,10 @@ def territorial_metrics(world: TerritorialWorld) -> dict[str, int | float]:
         effective_powers = 0.0
 
     conquests = sum(event.conquered for event in world.battles)
+    security_ratios = [order.security_ratio for order in world.orders]
     return {
         "generation": world.generation,
+        "policy": world.policy_name,
         "state_count": int(len(ids)),
         "mean_state_size": float(sizes.mean()),
         "largest_state_size": int(sizes.max()),
@@ -93,11 +102,26 @@ def territorial_metrics(world: TerritorialWorld) -> dict[str, int | float]:
         "power_hhi": power_hhi,
         "effective_powers": effective_powers,
         "largest_power_share": largest_power_share,
+        "resource_cv": resource_coefficient_of_variation(world),
         "border_edges": border_edge_count(world),
+        "attack_orders": len(world.orders),
         "battle_count": len(world.battles),
         "successful_battles": sum(event.success for event in world.battles),
         "conquests": conquests,
         "territorial_turnover": float(conquests / world.polities.size),
+        "war_cost": float(
+            sum(event.attacker_cost + event.defender_cost for event in world.battles)
+        ),
+        "attacks_while_secure": sum(order.secure_at_attack for order in world.orders),
+        "security_repair_attacks": sum(
+            order.motive == "security-repair" for order in world.orders
+        ),
+        "relative_power_attacks": sum(
+            order.motive == "relative-power-gain" for order in world.orders
+        ),
+        "mean_attacker_security_ratio": (
+            float(fmean(security_ratios)) if security_ratios else 0.0
+        ),
         "extinctions": len(world.extinctions),
         "fragmentations": len(world.fragmentations),
     }

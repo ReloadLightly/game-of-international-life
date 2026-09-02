@@ -89,7 +89,7 @@ def test_cli_commands_run_end_to_end(tmp_path: Path) -> None:
     assert (phase_dir / "jervis_phase_diagram.csv").is_file()
 
 
-def test_m2_cli_commands_run_end_to_end(tmp_path: Path) -> None:
+def test_m2_and_m3_cli_commands_run_end_to_end(tmp_path: Path) -> None:
     territorial_path = tmp_path / "territorial.png"
     assert (
         main(
@@ -135,3 +135,28 @@ def test_m2_cli_commands_run_end_to_end(tmp_path: Path) -> None:
         == 0
     )
     assert (ensemble_dir / "territorial_ensemble_summary.csv").is_file()
+
+    m3_dir = tmp_path / "m3"
+    assert (
+        main(
+            [
+                "m3",
+                "--height",
+                "6",
+                "--width",
+                "8",
+                "--states",
+                "4",
+                "--steps",
+                "1",
+                "--seeds",
+                "1",
+                "--dominant-share",
+                "0.40",
+                "--output-dir",
+                str(m3_dir),
+            ]
+        )
+        == 0
+    )
+    assert (m3_dir / "m3_ensemble_summary.csv").is_file()

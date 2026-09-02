@@ -8,6 +8,7 @@ from pathlib import Path
 from international_life.conway import PATTERNS, run_conway, seed_pattern
 from international_life.experiments.jervis_four_worlds import run_four_worlds
 from international_life.experiments.jervis_phase_diagram import run_phase_diagram
+from international_life.experiments.structural_comparison import run_structural_comparison
 from international_life.experiments.territorial_ensemble import run_territorial_ensemble
 from international_life.jervis import (
     JervisParameters,
@@ -93,6 +94,25 @@ def _build_parser() -> argparse.ArgumentParser:
         "--output-dir",
         type=Path,
         default=Path("artifacts"),
+    )
+
+    structural = subparsers.add_parser(
+        "structural-compare",
+        aliases=["m3"],
+        help="run the M3 matched security-versus-power comparison",
+    )
+    structural.add_argument("--height", type=int, default=12)
+    structural.add_argument("--width", type=int, default=16)
+    structural.add_argument("--states", type=int, default=8)
+    structural.add_argument("--steps", type=int, default=40)
+    structural.add_argument("--seeds", type=int, default=6)
+    structural.add_argument("--dominant-share", type=float, default=0.35)
+    structural.add_argument("--attack-threshold", type=float, default=0.98)
+    structural.add_argument("--battle-noise", type=float, default=0.06)
+    structural.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("artifacts/m3"),
     )
     return parser
 
@@ -183,6 +203,23 @@ def main(argv: list[str] | None = None) -> int:
             seeds=args.seeds,
             shape=(args.height, args.width),
             num_polities=args.states,
+        )
+        print("saved " + ", ".join(str(path) for path in paths))
+        return 0
+
+    if args.command in {"structural-compare", "m3"}:
+        params = TerritorialParameters(
+            attack_threshold=args.attack_threshold,
+            battle_noise=args.battle_noise,
+        )
+        paths = run_structural_comparison(
+            args.output_dir,
+            steps=args.steps,
+            seeds=args.seeds,
+            shape=(args.height, args.width),
+            num_polities=args.states,
+            dominant_share=args.dominant_share,
+            params=params,
         )
         print("saved " + ", ".join(str(path) for path in paths))
         return 0

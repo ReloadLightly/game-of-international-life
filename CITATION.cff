@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Löchli"
     given-names: "Roland"
-version: 0.2.0
+version: 0.3.0
 date-released: 2026-09-02
 url: "https://github.com/ReloadLightly/game-of-international-life"
 repository-code: "https://github.com/ReloadLightly/game-of-international-life"
@@ -13,6 +13,8 @@ license: MIT
 keywords:
   - cellular automata
   - international relations
+  - computational social science
   - agent-based modeling
   - artificial life
+  - structural realism
   - evolutionary computation

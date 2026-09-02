@@ -8,7 +8,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from international_life._territorial.measures import _available_treasury, alive_polities
-from international_life._territorial.policy import propose_attacks
+from international_life._territorial.policy import DEFAULT_POLICY, TerritorialPolicy
 from international_life._territorial.types import (
     AttackOrder,
     BattleEvent,
@@ -27,23 +27,48 @@ from international_life.hexgrid import (
 )
 
 
+def _order_rng(
+    world: TerritorialWorld,
+    params: TerritorialParameters,
+    order: AttackOrder,
+) -> np.random.Generator:
+    """Key battle noise to the potential battle, not to the policy's order count.
+
+    The same attacker-defender-target encounter receives the same stochastic
+    shock across matched policy runs, even when another policy issues additional
+    orders elsewhere. This is the common-random-numbers contract for M3.
+    """
+    target_id = order.target[0] * world.shape[1] + order.target[1]
+    seed_sequence = np.random.SeedSequence(
+        [
+            params.battle_seed,
+            world.generation,
+            order.attacker_id,
+            order.defender_id,
+            target_id,
+        ]
+    )
+    return np.random.default_rng(seed_sequence)
+
+
 def _resolve_battles(
     world: TerritorialWorld,
     params: TerritorialParameters,
     orders: tuple[AttackOrder, ...],
     available_treasury: FloatVector,
 ) -> tuple[PolityGrid, FloatVector, tuple[BattleEvent, ...]]:
-    seed_sequence = np.random.SeedSequence([params.battle_seed, world.generation])
-    rng = np.random.default_rng(seed_sequence)
     events: list[BattleEvent] = []
     next_treasury = available_treasury.copy()
 
     for order in sorted(orders, key=lambda candidate: candidate.attacker_id):
+        rng = _order_rng(world, params, order)
         attack_shock = 1.0 + rng.uniform(-params.battle_noise, params.battle_noise)
         defense_shock = 1.0 + rng.uniform(-params.battle_noise, params.battle_noise)
         attack_strength = order.predicted_attack * attack_shock
         defense_strength = order.predicted_defense * defense_shock
         success = attack_strength > defense_strength
+        attacker_cost = params.attack_cost * attack_strength
+        defender_cost = params.defense_cost * defense_strength
         events.append(
             BattleEvent(
                 attacker_id=order.attacker_id,
@@ -52,10 +77,12 @@ def _resolve_battles(
                 attack_strength=float(attack_strength),
                 defense_strength=float(defense_strength),
                 success=bool(success),
+                attacker_cost=float(attacker_cost),
+                defender_cost=float(defender_cost),
             )
         )
-        next_treasury[order.attacker_id] -= params.attack_cost * attack_strength
-        next_treasury[order.defender_id] -= params.defense_cost * defense_strength
+        next_treasury[order.attacker_id] -= attacker_cost
+        next_treasury[order.defender_id] -= defender_cost
 
     next_treasury = np.clip(next_treasury, 0.0, None)
     successful_by_target: dict[HexCoordinate, list[int]] = {}
@@ -145,13 +172,20 @@ def fragment_disconnected_polities(
 def territorial_step(
     world: TerritorialWorld,
     params: TerritorialParameters,
+    *,
+    policy: TerritorialPolicy | None = None,
 ) -> TerritorialWorld:
     """Advance resources, conflict, territorial control, and fragmentation once."""
     validate_hex_shape(world.shape, boundary=params.boundary)
+    selected_policy = policy or DEFAULT_POLICY
 
     previous_ids = {int(value) for value in alive_polities(world)}
     available = _available_treasury(world, params)
-    orders = propose_attacks(world, params, available_treasury=available)
+    orders = selected_policy.propose_attacks(
+        world,
+        params,
+        available_treasury=available,
+    )
     next_polities, next_treasury, events = _resolve_battles(
         world,
         params,
@@ -187,9 +221,11 @@ def territorial_step(
         resources=world.resources.copy(),
         fortification=next_fortification,
         treasury=next_treasury,
+        orders=orders,
         battles=events,
         fragmentations=fragmentations,
         extinctions=extinctions,
+        policy_name=selected_policy.name,
         generation=world.generation + 1,
     )
 
@@ -200,13 +236,15 @@ def run_territorial(
     *,
     steps: int,
     include_initial: bool = True,
+    policy: TerritorialPolicy | None = None,
 ) -> list[TerritorialWorld]:
-    """Run M2 and return independent generation snapshots."""
+    """Run a territorial model and return independent generation snapshots."""
     if steps < 0:
         raise ValueError("steps must be non-negative")
-    current = initial.copy()
+    selected_policy = policy or DEFAULT_POLICY
+    current = replace(initial.copy(), policy_name=selected_policy.name)
     history = [current.copy()] if include_initial else []
     for _ in range(steps):
-        current = territorial_step(current, params)
+        current = territorial_step(current, params, policy=policy)
         history.append(current.copy())
     return history

@@ -1,4 +1,4 @@
-"""State and event types for the M2 territorial model."""
+"""State and event types shared by the territorial models."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ FloatVector = NDArray[np.float64]
 
 @dataclass(frozen=True, slots=True)
 class TerritorialParameters:
-    """Transition parameters for the M2 territorial baseline."""
+    """Shared transition parameters for M2 and M3 territorial worlds."""
 
     production_rate: float = 0.55
     reserve_decay: float = 0.04
@@ -72,12 +72,17 @@ class TerritorialParameters:
         if self.battle_seed < 0:
             raise ValueError("battle_seed must be non-negative")
         if self.boundary != "fixed":
-            raise ValueError("M2 territorial transitions currently require fixed boundaries")
+            raise ValueError("territorial transitions currently require fixed boundaries")
 
 
 @dataclass(frozen=True, slots=True)
 class AttackOrder:
-    """One polity's chosen border-cell attack before stochastic resolution."""
+    """One polity's chosen border-cell attack before stochastic resolution.
+
+    The first seven fields preserve the M2 order contract. M3 appends explicit
+    process metadata so rival policy rules can be distinguished even when they
+    happen to produce similar final maps.
+    """
 
     attacker_id: int
     defender_id: int
@@ -86,6 +91,16 @@ class AttackOrder:
     predicted_defense: float
     expected_ratio: float
     score: float
+    policy: str = "opportunistic"
+    motive: str = "opportunity"
+    security_ratio: float = 0.0
+    security_target: float = 1.0
+    secure_at_attack: bool = False
+    attacker_power_share: float = 0.0
+    defender_power_share: float = 0.0
+    expected_relative_gain: float = 0.0
+    border_relief: int = 0
+    target_resource_ratio: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,6 +114,8 @@ class BattleEvent:
     defense_strength: float
     success: bool
     conquered: bool = False
+    attacker_cost: float = 0.0
+    defender_cost: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,7 +130,7 @@ class FragmentationEvent:
 
 @dataclass(frozen=True, slots=True)
 class TerritorialWorld:
-    """One synchronous generation of the M2 territorial world.
+    """One synchronous generation of the territorial world.
 
     Array coordinates are stable geographic cell identities. ``polities`` is a
     mutable control map, so a cell can change political identity without losing
@@ -125,9 +142,11 @@ class TerritorialWorld:
     resources: FloatGrid
     fortification: FloatGrid
     treasury: FloatVector
+    orders: tuple[AttackOrder, ...] = ()
     battles: tuple[BattleEvent, ...] = ()
     fragmentations: tuple[FragmentationEvent, ...] = ()
     extinctions: tuple[int, ...] = ()
+    policy_name: str = "opportunistic"
     generation: int = 0
 
     def __post_init__(self) -> None:
@@ -149,6 +168,8 @@ class TerritorialWorld:
             raise ValueError("treasury must be finite and non-negative")
         if int(self.polities.max()) >= len(self.treasury):
             raise ValueError("treasury must contain an entry for every polity ID")
+        if not self.policy_name:
+            raise ValueError("policy_name must not be empty")
         if self.generation < 0:
             raise ValueError("generation must be non-negative")
 
