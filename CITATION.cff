@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the repository."
+title: "Game of International Life"
+type: software
+authors:
+  - family-names: "Löchli"
+    given-names: "Roland"
+version: 0.2.0
+date-released: 2026-09-02
+url: "https://github.com/ReloadLightly/game-of-international-life"
+repository-code: "https://github.com/ReloadLightly/game-of-international-life"
+license: MIT
+keywords:
+  - cellular automata
+  - international relations
+  - agent-based modeling
+  - artificial life
+  - evolutionary computation
