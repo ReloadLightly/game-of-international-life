@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from statistics import fmean
 
-import numpy as np
-
 from international_life._alliances.types import AllianceWorld
 from international_life._territorial.measures import alive_polities, territorial_metrics
 

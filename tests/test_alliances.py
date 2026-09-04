@@ -150,7 +150,7 @@ def test_alliance_history_replays_exactly_and_preserves_matrix_invariants() -> N
     assert first.support_events == second.support_events
     for matrix in (first.commitments, first.reliability, first.threats):
         assert matrix.shape[0] >= len(first.territorial.treasury)
-        assert np.all((0.0 <= matrix) & (matrix <= 1.0))
+        assert np.all((matrix >= 0.0) & (matrix <= 1.0))
         assert np.all(np.diag(matrix) == 0.0)
 
 
