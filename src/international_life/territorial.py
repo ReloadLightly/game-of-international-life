@@ -1,15 +1,10 @@
-"""Territorial competition on a hexagonal lattice.
-
-The public facade keeps the theory-facing API compact while world state,
-initialization, policy, transition, and measurement layers remain separately
-inspectable. M2 supplies the generic opportunistic baseline; M3 adds matched
-security-seeking and power-maximizing policies without changing the world.
-"""
+"""Territorial competition on a hexagonal lattice."""
 
 from international_life._territorial.dynamics import (
     fragment_disconnected_polities,
     run_territorial,
     territorial_step,
+    territorial_step_from_orders,
 )
 from international_life._territorial.initialization import initialize_territorial_world
 from international_life._territorial.measures import (
@@ -18,7 +13,6 @@ from international_life._territorial.measures import (
     polity_capabilities,
     polity_cell_counts,
     polity_production,
-    resource_coefficient_of_variation,
     territorial_metrics,
 )
 from international_life._territorial.policy import (
@@ -56,8 +50,8 @@ __all__ = [
     "polity_cell_counts",
     "polity_production",
     "propose_attacks",
-    "resource_coefficient_of_variation",
     "run_territorial",
     "territorial_metrics",
     "territorial_step",
+    "territorial_step_from_orders",
 ]

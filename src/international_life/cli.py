@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 
 from international_life.conway import PATTERNS, run_conway, seed_pattern
+from international_life.experiments.alliance_comparison import run_alliance_comparison
 from international_life.experiments.jervis_four_worlds import run_four_worlds
 from international_life.experiments.jervis_phase_diagram import run_phase_diagram
 from international_life.experiments.structural_comparison import run_structural_comparison
@@ -114,6 +115,24 @@ def _build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("artifacts/m3"),
     )
+
+    alliance = subparsers.add_parser(
+        "alliance-compare",
+        aliases=["m4"],
+        help="run the M4 matched alliance commitment comparison",
+    )
+    alliance.add_argument("--height", type=int, default=12)
+    alliance.add_argument("--width", type=int, default=16)
+    alliance.add_argument("--states", type=int, default=8)
+    alliance.add_argument("--steps", type=int, default=24)
+    alliance.add_argument("--seeds", type=int, default=6)
+    alliance.add_argument("--attack-threshold", type=float, default=0.82)
+    alliance.add_argument("--battle-noise", type=float, default=0.06)
+    alliance.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("artifacts/m4"),
+    )
     return parser
 
 
@@ -219,6 +238,24 @@ def main(argv: list[str] | None = None) -> int:
             shape=(args.height, args.width),
             num_polities=args.states,
             dominant_share=args.dominant_share,
+            params=params,
+        )
+        print("saved " + ", ".join(str(path) for path in paths))
+        return 0
+
+    if args.command in {"alliance-compare", "m4"}:
+        params = TerritorialParameters(
+            offense_multiplier=1.10,
+            defense_multiplier=1.05,
+            attack_threshold=args.attack_threshold,
+            battle_noise=args.battle_noise,
+        )
+        paths = run_alliance_comparison(
+            args.output_dir,
+            steps=args.steps,
+            seeds=args.seeds,
+            shape=(args.height, args.width),
+            num_polities=args.states,
             params=params,
         )
         print("saved " + ", ".join(str(path) for path in paths))

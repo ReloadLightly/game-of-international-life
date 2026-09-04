@@ -1,195 +1,86 @@
-# Project state — v0.3 checkpoint
+# Project state — v0.4 checkpoint
 
-**Checkpoint date:** 2026-09-02  
+**Checkpoint date:** 2026-09-04  
 **Repository:** `ReloadLightly/game-of-international-life`  
-**Status:** public, executable M0–M3 computational IR laboratory
+**Status:** M0–M4 executable computational IR laboratory
 
 ## Stable identity
 
-Game of International Life studies how explicit local rules generate system-level patterns in international politics under anarchy. It combines:
-
-1. faithful cellular-automata baselines;
-2. theory-bearing artificial worlds;
-3. matched comparisons of rival IR mechanisms;
-4. later evolutionary discovery of interpretable strategic rules.
-
-The central standard is not a visually interesting map. It is a transparent chain from assumptions to information, decisions, interactions, process traces, outcomes, and failure conditions.
+Game of International Life turns international-relations mechanisms into explicit artificial worlds. Canonical cellular automata provide the formal baseline; later milestones add territorial states, rival strategic rules, and alliance networks while preserving matched-world comparison as the core experimental discipline.
 
 ## Implemented
 
-### M0 — Conway laboratory
+- **M0 — Conway:** faithful B3/S23, canonical patterns, synchronous updates.
+- **M1 — Jervis:** offense–defense advantage × distinguishability security-dilemma CA.
+- **M2 — Territorial states:** hex geography, resources, capability, conquest, extinction, fragmentation.
+- **M3 — Structural strategies:** security-seeking sufficiency versus continued relative-power maximization in matched worlds.
+- **M4 — Alliance politics:** binding versus flexible commitment doctrines on a weighted alliance graph above the territorial world.
 
-- generic two-dimensional Moore-neighborhood utilities;
-- synchronous fixed and toroidal updates;
-- faithful Conway B3/S23;
-- block, blinker, glider, and R-pentomino seeds;
-- canonical still-life, oscillator, and glider tests.
+## M4 invariants
 
-### M1 — Jervisian security dilemma
+1. Alliances are a graph layer, not geographic adjacency.
+2. Binding and flexible pairs share the same initial territory, capabilities, relations, threats, and battle physics.
+3. Initial alliance worlds are fingerprinted.
+4. M2/M3 retain ownership of battle resolution, conquest, extinction, and fragmentation.
+5. Alliance support has explicit costs.
+6. The doctrine treatment is bundled and must not be described as a one-parameter causal estimate.
+7. Abandonment and entrapment are process traces, not post-hoc labels inferred from final outcomes.
+8. Successor polity IDs are not recycled; inherited alliance relations are attenuated but traceable.
+9. Attractive single histories never substitute for matched ensembles.
 
-- discrete arms and posture cellular automaton;
-- offense–defense advantage;
-- distinguishability of offensive and defensive postures;
-- reciprocal local threat response;
-- matched four-world experiment;
-- continuous parameter sweep and phase diagrams;
-- explicit model specification and directional tests.
-
-### M2 — Hexagonal territorial states
-
-- six-neighbor odd-row hex geometry;
-- stable geographic identity distinct from political control;
-- reproducible connected-state maps;
-- spatial resource fields;
-- polity production, treasury, and capability aggregation;
-- frontier dispersion and local concentration;
-- fortification, battle costs, conquest, and turnover;
-- state extinction;
-- connected-component fragmentation and non-recycled successor IDs;
-- state-size, polarity, border, conflict, extinction, and fragmentation metrics;
-- single-history and ensemble CLI workflows.
-
-### M3 — Structural-policy comparison
-
-- replaceable `TerritorialPolicy` interface;
-- one shared candidate generator for all rival policies;
-- M2 opportunistic policy preserved as backward-compatible default;
-- security-seeking rule with a declared `1.10` sufficiency threshold;
-- power-maximizing rule that continues exploiting relative gains after sufficiency;
-- exact balanced and dominant-power initial capability regimes;
-- diffuse and clustered resource geographies;
-- SHA-256 fingerprints over all policy-visible initial arrays;
-- encounter-keyed common random numbers;
-- attack-order motive and security metadata;
-- realized attacker and defender cost traces;
-- full trajectory, run, ensemble, and paired-difference tables;
-- machine-readable experiment manifest;
-- matched-world and mechanism plots;
-- rigorous M3 specification and a substantially rebuilt README.
-
-## Frozen M3 design
-
-Default run:
+## Frozen M4 experiment
 
 ```text
+commitment doctrine ∈ {binding, flexible}
+polarity            ∈ {bipolar, multipolar}
+threat distribution ∈ {concentrated, diffuse}
+
 12 × 16 hex cells
-8 initial polities
-40 generations
+8 initial states
+24 generations
 6 seeds per structural condition
-2 capability regimes
-2 resource regimes
-2 policy rules
 48 histories / 24 matched pairs
 ```
 
-Matched pair contract:
+## Reference mechanism check
 
-- same initial territory;
-- same resource field;
-- same exact capability distribution;
-- same fortification and treasury state;
-- same world dynamics and feasibility threshold;
-- same stochastic shock for every shared encounter;
-- only the policy objective and stopping rule differ.
-
-## Reference-run mechanism check
-
-The committed v0.3 reference run produced these mean paired differences, defined as `power-maximizing minus security-seeking`:
+The rebuilt v0.4 implementation produces the intended alliance-security-dilemma contrast in the frozen reference ensemble:
 
 ```text
-attack orders                         +21.54
-attacks after security sufficiency    +31.63
-cumulative war cost                  +135.73
-territorial conquests                 +20.83
-final capability HHI                  +0.041
-original-state survival rate          -0.115
-final state count                     -0.96
+                                      binding    flexible
+abandonment                              0.00       15.25
+entrapment                              54.29        0.00
+chain-ganging crises                    24.00        0.00
+third-party participations             135.62       52.25
+support cost                            951.89      464.27
+total conflict cost                   1440.97      751.13
+final alliance edges                    17.38       13.71
+original-state survival                  0.964       1.000
 ```
 
-Interpretation boundary:
+Interpretation: the mechanism is behaviorally live in this artificial world. This is not historical validation of Snyder and not evidence that either doctrine is normatively preferable.
 
-- this verifies that the implemented stopping-rule contrast is behaviorally live;
-- it is a small artificial-world ensemble, not evidence that offensive realism is historically true;
-- aggregate directions are tendencies and individual paired seeds can reverse;
-- systematic parameter sensitivity has not yet been completed.
+## Verification before publication
 
-## Verification
-
-At this checkpoint:
-
-- 38 tests pass locally;
-- local statement coverage is 94%;
-- Python source and tests compile cleanly;
-- M0–M3 CLI commands run end to end;
-- M2 and M3 deterministic replay are covered;
-- the M3 experiment writes auditable manifests and paired outputs;
-- CI is configured for Python 3.11 and 3.12.
-
-Remote CI must be checked after the v0.3 commit reaches `main`.
-
-## Decisions that should not be silently reversed
-
-1. Conway's Life remains a faithful baseline rather than an IR metaphor with renamed cells.
-2. Theory names require explicit theory-to-mechanism chains.
-3. Geographic identity and political identity remain separate.
-4. Rival policy rules share one world, one feasibility model, and one battle resolver.
-5. The treatment difference belongs in the policy—not in hidden environmental advantages.
-6. Matched fingerprints and common random numbers remain part of comparative experiments.
-7. Process observables remain first-class outputs alongside final outcomes.
-8. Hand-coded theory baselines precede GA/GP rule evolution.
-9. Alliance ties will use a graph layer rather than being forced into geographic adjacency.
-10. Polity IDs are not recycled; extinction, fragmentation, and succession remain traceable.
-11. Single attractive maps do not substitute for paired ensembles.
-12. Complexity is added only when a concrete substantive question requires it.
+- focused alliance mechanism tests pass locally;
+- frozen M4 reference command runs end to end locally;
+- 48 histories and 24 matched doctrine pairs are produced;
+- Python source compiles;
+- full repository CI must pass on Python 3.11 and 3.12 before merge to `main`.
 
 ## Exact next milestone
 
-**M4 — Snyderian alliance politics on a territorial world.**
+**M5 — Perception and signaling on the territorial-alliance world.**
 
-The smallest meaningful M4 should add a dynamic alliance graph without rewriting M2/M3 territory or battle mechanics.
+Add actual versus perceived posture, noisy capability estimates, offense–defense advantage, distinguishability, reassurance/deterrence signals, and mobilization visibility. Preserve M2–M4 mechanics and make perception—not a rewritten world—the treatment.
 
-Minimum state:
+## Deferred
 
-- alliance partner set;
-- bilateral commitment strength;
-- dependence;
-- perceived reliability;
-- adversary relation;
-- abandonment exposure;
-- entrapment exposure.
-
-Minimum crisis actions:
-
-- support;
-- partial support;
-- withhold support;
-- tighten or loosen commitment;
-- seek or leave an alliance.
-
-First matched experiment:
-
-```text
-commitment flexibility × polarity × threat concentration
-```
-
-Primary process measurements:
-
-- abandonment;
-- entrapment;
-- chain-ganging;
-- buck-passing;
-- alliance turnover;
-- conflict diffusion.
-
-M4 is successful only if stronger commitments reduce some abandonment risk while increasing entrapment exposure or cost. A costless “strong alliance” variable would erase Snyder's central dilemma.
-
-## Deferred—not forgotten
-
-- full M3 sensitivity surfaces;
-- system-wide balancing rather than strongest-neighbor sufficiency;
-- internal balancing as a peaceful allocation choice;
-- incomplete information and signaling;
-- heterogeneous policy populations;
-- fossil-record replication of Bremer–Mihalka and Cederman;
-- GA/GP evolution of interpretable local rules;
+- independent sweeps of the components bundled inside M4 doctrines;
+- richer bargaining and endogenous threat learning;
+- heterogeneous doctrines within one system;
+- simultaneous crises;
+- broader M3/M4 sensitivity surfaces;
+- evolutionary discovery of compact strategic and alliance rules;
+- fossil-record replications of Bremer–Mihalka and Cederman;
 - empirical initialization and held-out historical comparison.

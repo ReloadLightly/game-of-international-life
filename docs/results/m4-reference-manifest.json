@@ -1,0 +1,98 @@
+{
+  "design": {
+    "commitment_doctrines": [
+      "flexible",
+      "binding"
+    ],
+    "initial_polities": 8,
+    "paired_seeds_per_condition": 6,
+    "polarity_regimes": [
+      "bipolar",
+      "multipolar"
+    ],
+    "shape": [
+      12,
+      16
+    ],
+    "steps": 24,
+    "threat_regimes": [
+      "concentrated",
+      "diffuse"
+    ]
+  },
+  "doctrine_parameters": {
+    "binding": {
+      "alliance_threshold": 0.5,
+      "defensive_scope": 1.0,
+      "entrapment_aversion": 0.08,
+      "formation_commitment": 0.66,
+      "formation_threshold": 0.72,
+      "full_support_threshold": 0.58,
+      "max_new_alliances": 1,
+      "name": "binding",
+      "offensive_scope": 0.9,
+      "partial_support_fraction": 0.09,
+      "partial_support_threshold": 0.48,
+      "relation_learning_rate": 0.04,
+      "request_threshold": 0.35,
+      "successor_retention": 0.65,
+      "support_cost_rate": 0.2,
+      "support_fraction": 0.18
+    },
+    "flexible": {
+      "alliance_threshold": 0.5,
+      "defensive_scope": 0.55,
+      "entrapment_aversion": 0.45,
+      "formation_commitment": 0.66,
+      "formation_threshold": 0.72,
+      "full_support_threshold": 0.7,
+      "max_new_alliances": 1,
+      "name": "flexible",
+      "offensive_scope": 0.2,
+      "partial_support_fraction": 0.09,
+      "partial_support_threshold": 0.56,
+      "relation_learning_rate": 0.07,
+      "request_threshold": 0.35,
+      "successor_retention": 0.65,
+      "support_cost_rate": 0.2,
+      "support_fraction": 0.18
+    }
+  },
+  "experiment": "M4 alliance security dilemma",
+  "interpretive_status": "matched generative mechanism experiment inspired by Snyderian alliance politics; not historical validation or a policy recommendation",
+  "matching_contract": {
+    "battle_noise_key": [
+      "battle_seed",
+      "generation",
+      "attacker_id",
+      "defender_id",
+      "target_cell_id"
+    ],
+    "difference_definition": "binding minus flexible",
+    "same_crisis_candidate_generator": true,
+    "same_initial_world_within_doctrine_pair": true,
+    "same_territorial_resolver_across_doctrines": true
+  },
+  "territorial_parameters": {
+    "attack_cost": 0.1,
+    "attack_threshold": 0.82,
+    "battle_damage": 0.88,
+    "battle_noise": 0.06,
+    "battle_seed": 0,
+    "boundary": "fixed",
+    "conquest_retention": 0.2,
+    "defense_cost": 0.06,
+    "defense_multiplier": 1.05,
+    "fortification_cap": 1.5,
+    "fortification_growth": 0.05,
+    "fortification_value": 0.75,
+    "garrison_strength": 0.35,
+    "mobilization": 0.34,
+    "offense_multiplier": 1.1,
+    "production_rate": 0.55,
+    "reserve_decay": 0.04,
+    "resource_attraction": 0.12,
+    "support_bonus": 0.12
+  },
+  "version": "0.4.0"
+}

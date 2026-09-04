@@ -1,12 +1,12 @@
 # Repository profile text
 
-## Recommended GitHub “About” description
+## GitHub About description
 
-> A computational laboratory for international relations: cellular automata, emergent territorial states, and matched experiments on security, power, alliances, and adaptation under anarchy.
+> Computational IR in Python: cellular automata, emergent states, and matched experiments on security, power, and alliance politics.
 
-## Compact alternative
+## Longer one-line description
 
-> From Conway's Game of Life to artificial geopolitics: explicit local rules, emergent states, and matched computational experiments on IR theory.
+> From Conway's Game of Life to Artificial Geopolitics: cellular automata, territorial states, alliance networks, and matched experiments on international-relations theory.
 
 ## Recommended topics
 
@@ -18,11 +18,12 @@ agent-based-modeling
 complex-systems
 game-of-life
 artificial-life
+alliance-politics
 structural-realism
 evolutionary-computation
 python
 ```
 
-## Social-card subtitle
+## Portfolio description
 
-> Build artificial worlds. Change one strategic rule. Watch international order emerge—or collapse.
+Game of International Life turns international-relations theories into executable artificial worlds. It begins with canonical cellular automata, grows connected territorial states on a hexagonal lattice, and compares security-seeking, power-maximizing, and alliance-commitment mechanisms under matched geography, capabilities, relations, and stochastic shocks. The long-term aim is to evolve interpretable strategic rules and identify where established theories explain—or fail to explain—emergent order under anarchy.

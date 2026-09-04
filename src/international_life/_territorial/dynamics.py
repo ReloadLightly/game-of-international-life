@@ -32,12 +32,7 @@ def _order_rng(
     params: TerritorialParameters,
     order: AttackOrder,
 ) -> np.random.Generator:
-    """Key battle noise to the potential battle, not to the policy's order count.
-
-    The same attacker-defender-target encounter receives the same stochastic
-    shock across matched policy runs, even when another policy issues additional
-    orders elsewhere. This is the common-random-numbers contract for M3.
-    """
+    """Key battle noise to the encounter rather than the policy's order count."""
     target_id = order.target[0] * world.shape[1] + order.target[1]
     seed_sequence = np.random.SeedSequence(
         [
@@ -114,12 +109,7 @@ def fragment_disconnected_polities(
     *,
     boundary: Boundary = "fixed",
 ) -> tuple[PolityGrid, FloatVector, tuple[FragmentationEvent, ...]]:
-    """Turn every detached component into a new contiguous successor polity.
-
-    The largest component retains the parent ID. The parent's treasury is split
-    in proportion to component resource production; new IDs are appended and
-    never reuse extinct historical IDs.
-    """
+    """Turn every detached component into a new contiguous successor polity."""
     validate_2d(polities, name="polities")
     validate_2d(resources, name="resources")
     if polities.shape != resources.shape:
@@ -169,23 +159,16 @@ def fragment_disconnected_polities(
     return next_polities, np.asarray(treasury_values, dtype=np.float64), tuple(events)
 
 
-def territorial_step(
+def _advance_from_orders(
     world: TerritorialWorld,
     params: TerritorialParameters,
+    orders: tuple[AttackOrder, ...],
+    available: FloatVector,
     *,
-    policy: TerritorialPolicy | None = None,
+    policy_name: str,
 ) -> TerritorialWorld:
-    """Advance resources, conflict, territorial control, and fragmentation once."""
-    validate_hex_shape(world.shape, boundary=params.boundary)
-    selected_policy = policy or DEFAULT_POLICY
-
+    """Apply an already-chosen order set using the shared territorial resolver."""
     previous_ids = {int(value) for value in alive_polities(world)}
-    available = _available_treasury(world, params)
-    orders = selected_policy.propose_attacks(
-        world,
-        params,
-        available_treasury=available,
-    )
     next_polities, next_treasury, events = _resolve_battles(
         world,
         params,
@@ -225,8 +208,59 @@ def territorial_step(
         battles=events,
         fragmentations=fragmentations,
         extinctions=extinctions,
-        policy_name=selected_policy.name,
+        policy_name=policy_name,
         generation=world.generation + 1,
+    )
+
+
+def territorial_step_from_orders(
+    world: TerritorialWorld,
+    params: TerritorialParameters,
+    *,
+    orders: tuple[AttackOrder, ...],
+    policy_name: str = "external-orders",
+) -> TerritorialWorld:
+    """Advance once from explicit orders while preserving all M2/M3 world mechanics.
+
+    M4 uses this narrow seam after its alliance layer has selected one primary
+    crisis and calculated third-party contributions. Production, battle noise,
+    war costs, fortification, conquest, extinction, and fragmentation remain
+    owned by the territorial engine.
+    """
+    validate_hex_shape(world.shape, boundary=params.boundary)
+    if not policy_name:
+        raise ValueError("policy_name must not be empty")
+    available = _available_treasury(world, params)
+    return _advance_from_orders(
+        world,
+        params,
+        orders,
+        available,
+        policy_name=policy_name,
+    )
+
+
+def territorial_step(
+    world: TerritorialWorld,
+    params: TerritorialParameters,
+    *,
+    policy: TerritorialPolicy | None = None,
+) -> TerritorialWorld:
+    """Advance resources, conflict, territorial control, and fragmentation once."""
+    validate_hex_shape(world.shape, boundary=params.boundary)
+    selected_policy = policy or DEFAULT_POLICY
+    available = _available_treasury(world, params)
+    orders = selected_policy.propose_attacks(
+        world,
+        params,
+        available_treasury=available,
+    )
+    return _advance_from_orders(
+        world,
+        params,
+        orders,
+        available,
+        policy_name=selected_policy.name,
     )
 
 
