@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "game-of-international-life"
-version = "0.3.0"
-description = "A computational laboratory for international relations using cellular automata, emergent states, and matched theory experiments."
+version = "0.4.0"
+description = "A computational laboratory for international relations using cellular automata, emergent territorial states, alliance networks, and matched theory experiments."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -17,9 +17,11 @@ keywords = [
   "game-of-life",
   "international-relations",
   "computational-social-science",
+  "alliance-politics",
   "structural-realism",
   "agent-based-modeling",
   "complex-systems",
+  "artificial-life",
   "evolutionary-computation",
 ]
 classifiers = [

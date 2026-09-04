@@ -1,70 +1,43 @@
 # Changelog
 
-## 0.3.0 — 2026-09-02
+## 0.4.0 — 2026-09-04
 
 ### Added
 
-- replaceable territorial-policy protocol shared by M2 and later theory modules;
-- theory-neutral border-attack candidate generation;
-- security-seeking policy with explicit capability-sufficiency stopping rule;
-- power-maximizing policy that values relative gains beyond immediate sufficiency;
-- exact balanced and dominant-power initial capability regimes;
-- diffuse and spatially clustered resource regimes;
-- SHA-256 fingerprints for all policy-visible initial arrays;
-- encounter-keyed common random numbers for matched battle shocks;
-- policy motive, security ratio, power share, relative-gain, and frontier metadata on orders;
-- realized attacker and defender costs on battle events;
-- policy-process metrics, including attacks launched after security sufficiency;
-- frozen `2 × 2 × 2` M3 structural comparison;
-- machine-readable experiment manifest;
-- full timeseries, run summaries, ensemble summaries, and paired-difference outputs;
-- matched-world, war-cost, post-sufficiency attack, and concentration figures;
-- compact committed v0.3 reference results;
-- M3 formal specification and tests for matching, stopping rules, resource regimes, and common random numbers;
-- `structural-compare` command and `m3` alias.
+- weighted alliance graph above the territorial lattice;
+- exact bipolar and multipolar capability treatments;
+- concentrated and diffuse threat regimes;
+- binding and flexible commitment doctrines;
+- full, partial, and withheld support decisions;
+- explicit third-party capability contributions and support costs;
+- abandonment, entrapment, buck-passing, chain-ganging, conflict-diffusion, and alliance-turnover traces;
+- reliability learning, alliance formation/dissolution, and attenuated successor-state inheritance;
+- alliance-world fingerprints for matched-doctrine auditing;
+- `territorial_step_from_orders`, a narrow seam reusing M2/M3 battle and succession mechanics;
+- frozen `2 × 2 × 2` M4 experiment with 48 histories / 24 matched pairs;
+- machine-readable manifest, trajectories, summaries, paired differences, and figures;
+- formal M4 specification and mechanism tests;
+- `alliance-compare` command and `m4` alias.
+
+### Reference mechanism check
+
+In the frozen v0.4 reference ensemble, binding commitments eliminate abandonment while producing entrapment, chain-ganging, more third-party participation, and higher conflict costs. The result is labeled as artificial-world mechanism evidence rather than historical validation.
 
 ### Changed
 
-- package version advanced to `0.3.0`;
-- territorial transitions now accept an explicit policy while retaining the M2 opportunistic default;
-- repository README rebuilt around the cumulative M0–M3 research program;
-- theory-to-mechanism and research-program documents updated through the alliance roadmap;
-- project checkpoint advanced to M3 with M4 frozen as the next milestone;
-- default M3 reference design set to a tractable `12 × 16` world, eight polities, forty generations, and six paired seeds per structural condition.
+- package version advanced to `0.4.0`;
+- README advanced from M0–M3 to the cumulative M0–M4 research program;
+- project checkpoint advances to M4, with perceptual uncertainty and signaling reserved for M5.
 
-### Verification
+## 0.3.0 — 2026-09-02
 
-- 38 tests pass locally;
-- 94% statement coverage in the v0.3 local verification run;
-- all Python source and test files compile;
-- the default M3 reference experiment produces 48 histories and 24 matched pairs.
+- introduced matched security-seeking versus power-maximizing policies;
+- added balanced/dominant capability regimes, diffuse/clustered resources, world fingerprints, encounter-keyed common random numbers, paired outputs, and M3 documentation.
 
 ## 0.2.0 — 2026-09-02
 
-### Added
-
-- odd-row six-neighbor hexagonal lattice utilities;
-- connected territorial-state initialization from reproducible local growth;
-- local resource fields, polity treasuries, and capability aggregation;
-- border-target selection, battle costs, fortification, conquest, and extinction;
-- connected-component fragmentation into traceable successor polity IDs;
-- state-size, polarity, border, war, turnover, extinction, and fragmentation metrics;
-- single-history and ensemble M2 command-line workflows;
-- true-hex map rendering, trajectory CSVs, and plots;
-- M2 model specification and matched-theory research plan;
-- invariant, mechanism, replay, experiment, and CLI tests.
-
-### Changed
-
-- repository documentation distinguishes shared world mechanics from replaceable theory-specific policy rules;
-- package version advanced to `0.2.0`.
+- introduced the hexagonal territorial-state substrate with resources, capability, borders, battle, conquest, extinction, fragmentation, metrics, and ensemble workflows.
 
 ## 0.1.0 — 2026-09-02
 
-### Added
-
-- faithful Conway B3/S23 laboratory;
-- square-lattice neighborhood utilities;
-- Jervisian offense–defense and distinguishability mechanism model;
-- matched four-world experiment and parameter sweep;
-- initial theory-to-mechanism and research-program documentation.
+- introduced faithful Conway B3/S23 and the Jervisian offense–defense / distinguishability security-dilemma CA.
