@@ -4,7 +4,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-111111.svg)](LICENSE)
 
-## From Conway's Game of Life to artificial geopolitics
+## From Conway's Game of Life to Artificial Geopolitics
 
 **Game of International Life is a computational laboratory for international relations: cellular automata, emergent territorial states, and matched experiments on security, power, alliances, and adaptation under anarchy.**
 
